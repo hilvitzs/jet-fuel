@@ -1,0 +1,33 @@
+{
+  "name": "jet-fuel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devthehuman/jet-fuel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/devthehuman/jet-fuel#readme",
+  "bugs": {
+    "url": "https://github.com/devthehuman/jet-fuel/issues"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "body-parser": "^1.17.2",
+    "chai": "^4.0.2",
+    "knex": "^0.13.0",
+    "nodemon": "^1.11.0",
+    "pg": "^6.4.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2"
+  }
+}
