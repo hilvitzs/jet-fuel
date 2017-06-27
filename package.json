@@ -21,6 +21,7 @@
     "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
+    "body-parser": "^1.17.2",
     "chai": "^4.0.2",
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
