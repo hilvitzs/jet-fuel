@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
       table.integer('folder_id').unsigned()
       table.foreign('folder_id')
         .references('folders.id');
-      table.timestamps();
+      table.timestamps(true, true);
     })
   ])
 };
