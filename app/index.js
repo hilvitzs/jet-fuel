@@ -8,13 +8,6 @@ addFolderBtn.on('click', () => {
   userInput.val('')
 })
 
-$('body').on('click', '.folder', () => {
-  $('.folder').append(`
-    <section class='link'>
-      <p>something</p>
-    </section>
-  `)
-})
 
 const addFolder = (input) => {
   fetch('/api/v1/folders',
