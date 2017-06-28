@@ -65,6 +65,15 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   });
 });
 
+app.get('/api/v1/folders/:id/links/:link_id', (request, response, next) => {
+  const { id, link_id } = request.params;
+
+  database('links').where({ 'folder_id': id, 'id': link_id }).select('url')
+    .then(url => {
+      return response.redirect(301, url)
+    })
+})
+
 app.post('/api/v1/links', (request, response) => {
   const link = request.body;
 
