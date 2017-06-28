@@ -15,10 +15,15 @@ app.get('/', (request, response) => response.sendFile(path.join(__dirname, './ap
 app.get('/api/v1/folders', (request, response) => {
   database('folders').select()
     .then(folders => {
-      response.status(200).json(folders);
+      if (folders) {
+        response.status(200).json(folders);
+      }
+      response.status(404).json({
+        error: 'No Folders Found'
+      });
     })
     .catch(error => {
-      console.error('error: ', error)
+      response.status(500).json({ error });
     });
 });
 
@@ -34,15 +39,20 @@ app.post('/api/v1/folders', (request, response) => {
     });
 });
 
-app.get('/folders/:id/links', (request, response) => {
+app.get('/api/v1/folders/:id/links', (request, response) => {
   const { id } = request.params;
 
   database('links').where('folder_id', id).select()
   .then(links => {
-    response.status(200).json(links)
+    if (links) {
+      response.status(200).json(links)
+    }
+    response.status(404).json({
+      error: 'No Links Found'
+    });
   })
   .catch(error => {
-    console.log('error: ', error)
+    response.status(500).json({ error });
   });
 });
 
