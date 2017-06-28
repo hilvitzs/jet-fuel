@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('folders', function(table) {
       table.increments('id').primary();
       table.string('title');
-      table.timestamps();
+      table.timestamps(true, true);
     }),
 
     knex.schema.createTable('links', function(table) {
@@ -21,7 +21,7 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTable('folders'),
-    knex.schema.dropTable('links')
+    knex.schema.dropTable('links'),
+    knex.schema.dropTable('folders')
   ]);
 };
