@@ -30,12 +30,21 @@ app.get('/api/v1/folders', (request, response) => {
 app.post('/api/v1/folders', (request, response) => {
   const folder = request.body;
 
+  for (let requiredParameter of ['title']) {
+    if (!folder[requiredParameter]) {
+      return response.status(422).json({
+        error: `Expected format: { title: <String> }.
+        You are missing a ${requiredParameter} property.`
+      });
+    }
+  }
+
   database('folders').insert(folder, 'id')
     .then(folder => {
-      response.status(201).json({ id: folder[0] })
+      response.status(201).json({ id: folder[0] });
     })
     .catch(error => {
-      console.error('error: ', error);
+      response.status(500).json({ error });
     });
 });
 
