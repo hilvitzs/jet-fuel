@@ -82,17 +82,6 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   });
 });
 
-//redirect to regular url
-app.get('/:short_url', (request, response, next) => {
-  const { short_url } = request.params;
-
-  database('links').where('short_url', short_url).increment('visits', 1)
-  .then(() => database('links').where('short_url', short_url).select('long_url'))
-  .then(long_url => {
-    return response.redirect(301, long_url[0]);
-  });
-});
-
 
 app.get('*', (request, response) => response.sendFile(path.join(__dirname, './app/index.html')));
 

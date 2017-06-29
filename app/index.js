@@ -1,14 +1,25 @@
 $('.url-submit').on('click', () => {
-  addLink()
+  selectFolder()
 })
 
  $('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
   addFolder(userInput.val());
-  getFolders();
+  getAllFolders();
   userInput.val('');
-})
+});
 
+const hashUrl = () => {
+  const characters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
+  let hashed = '';
+
+  for (let i = 0; i < 15; i++) {
+    const random = Math.floor(Math.random() * characters.length - 1) + 1;
+    hashed += characters[random]
+  }
+  console.log(hashed);
+  return hashed;
+}
 
 const addFolder = (input) => {
   fetch('/api/v1/folders', {
@@ -18,7 +29,7 @@ const addFolder = (input) => {
   });
 }
 
-const getFolders = () => {
+const getAllFolders = () => {
   fetch('/api/v1/folders', {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
@@ -36,7 +47,7 @@ const prependFolders = (array) => {
   });
 }
 
-const addLink = () => {
+const selectFolder = () => {
   const folderTitle = $('.folder-selection').val()
   const url = $('.url-input').val()
 
@@ -47,23 +58,26 @@ const addLink = () => {
   .then(response => response.json())
   .then(folders => {
     const foundFolder = folders.find(folder => folder.title === folderTitle);
-    return postLink(url, foundFolder);
+    return addLink(url, foundFolder);
   });
 }
 
-const postLink = (url, folder) => {
+const addLink = (url, folder) => {
+  const hashedUrl = hashUrl();
+
   fetch(`/api/v1/links`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      url,
+      long_url: url,
+      short_url: hashedUrl,
       visits: 0,
       folder_id: folder.id
-    });
+    })
   });
 }
 
-const getFolder = (activeFolder) => {
+const getSpecificFolder = (activeFolder) => {
   fetch('/api/v1/folders', {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
@@ -85,5 +99,5 @@ const getLinks = (foundFolder, folder) => {
 }
 
 $('.folders').on('click', (event) => {
-  getFolder(event.target);
+  getSpecificFolder(event.target);
 });
