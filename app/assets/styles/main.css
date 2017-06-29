@@ -1,0 +1,10 @@
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.folder {
+  background: url("/assets/images/folder.png");
+  background-size: cover;
+  width: 150px;
+  height: 150px;
+}

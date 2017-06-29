@@ -1,6 +1,6 @@
 $('.url-submit').on('click', () => {
   selectFolder()
-})
+});
 
  $('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
@@ -38,11 +38,13 @@ const getAllFolders = () => {
   .then(folders => prependFolders(folders));
 }
 
+getAllFolders();
+
 const prependFolders = (array) => {
   array.map(folder => {
     return $('.folders').prepend(`
       <div class='folder'>
-        <p>${folder.title}</p>
+        ${folder.title}
       </div>`)
   });
 }
@@ -84,7 +86,7 @@ const getSpecificFolder = (activeFolder) => {
   })
   .then(response => response.json())
   .then(folders => {
-    const foundFolder = folders.find(folder => folder.title === activeFolder.textContent);
+    const foundFolder = folders.find(folder => folder.title == activeFolder.innerText);
     return getLinks(foundFolder, activeFolder);
   });
 }
@@ -95,7 +97,10 @@ const getLinks = (foundFolder, folder) => {
     headers: { 'Content-Type': 'application/json' }
   })
   .then(response => response.json())
-  .then(links => links.map(link => folder.append(`${link.url}`)));
+  .then(links => links.map(link => {
+    return $(folder).append(`
+    <a href="${link.long_url}">${link.short_url}</a>`)
+  }));
 }
 
 $('.folders').on('click', (event) => {
