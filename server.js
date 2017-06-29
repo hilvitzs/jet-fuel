@@ -65,13 +65,14 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   });
 });
 
-app.get('/api/v1/links/:short_url', (request, response, next) => {
+app.get('/:short_url', (request, response, next) => {
   const { short_url } = request.params;
 
-  database('links').where('short_url', short_url ).select('long_url')
-    .then(long_url => {
-      return response.redirect(301, long_url);
-    });
+  database('links').where('short_url', short_url).increment('visits', 1)
+  then(() => database('links').where('short_url', short_url).select('long_url'))
+  .then(long_url => {
+    return response.redirect(301, long_url);
+  });
 });
 
 app.post('/api/v1/links', (request, response) => {
