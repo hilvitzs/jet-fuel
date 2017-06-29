@@ -1,13 +1,9 @@
-const addFolderBtn = $('.folder-submit')
-const folders = $('.folders')
-const submitURL = $('.url-submit')
 
-submitURL.on('click', () => {
+$('.url-submit').on('click', () => {
   addLink()
 })
 
-
-addFolderBtn.on('click', () => {
+ $('.folder-submit').on('click', () => {
   let userInput = $('.folder-input')
   addFolder(userInput.val())
   getFolders()
@@ -35,7 +31,7 @@ const getFolders = () => {
 
 const prependFolders = (array) => {
   array.map(folder => {
-    return folders.prepend(`<div class='folder'>
+    return $('.folders').prepend(`<div class='folder'>
     <p>${folder.title}</p>
   </div>`)
   })
