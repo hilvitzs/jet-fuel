@@ -8,7 +8,8 @@ exports.up = function(knex, Promise) {
 
     knex.schema.createTable('links', function(table) {
       table.increments('id').primary();
-      table.string('url');
+      table.string('long_url');
+      table.string('short_url').unique();
       table.integer('visits');
       table.integer('folder_id').unsigned()
       table.foreign('folder_id')

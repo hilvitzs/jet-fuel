@@ -65,14 +65,14 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   });
 });
 
-app.get('/api/v1/folders/:id/links/:link_id', (request, response, next) => {
-  const { id, link_id } = request.params;
+app.get('/api/v1/links/:short_url', (request, response, next) => {
+  const { short_url } = request.params;
 
-  database('links').where({ 'folder_id': id, 'id': link_id }).select('url')
-    .then(url => {
-      return response.redirect(301, url)
-    })
-})
+  database('links').where('short_url', short_url ).select('long_url')
+    .then(long_url => {
+      return response.redirect(301, long_url);
+    });
+});
 
 app.post('/api/v1/links', (request, response) => {
   const link = request.body;
