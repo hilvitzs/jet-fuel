@@ -30,15 +30,14 @@ const getFolders = () => {
     method: 'GET',
     headers: {'Content-Type': 'application/json'}
   }).then(response => response.json())
-    .then(folders => prepend(folders))
+    .then(folders => prependFolders(folders))
 }
 
-const prepend = (array) => {
+const prependFolders = (array) => {
   array.map(folder => {
-    return folders.prepend(`<section class='folder'>
-      <img src='./assets/images/folder.png'/>
-      <p>${folder.title}</p>
-    </section>`)
+    return folders.prepend(`<div class='folder'>
+    <p>${folder.title}</p>
+  </div>`)
   })
 }
 
@@ -70,3 +69,28 @@ const postLink = (url, folder) => {
     }
   )
 }
+
+const getFolder = (activeFolder) => {
+  fetch('/api/v1/folders',
+  {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  }).then(response => response.json())
+    .then(folders => {
+      const foundFolder = folders.find(folder => folder.title === activeFolder.textContent)
+      console.log(foundFolder);
+      return getLinks(foundFolder, activeFolder)
+    })
+}
+
+const getLinks = (foundFolder, folder) => {
+  fetch(`/api/v1/folders/${foundFolder.id}/links`, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  }).then(response => response.json())
+    .then(links => links.map(link => folder.append(`${link.url}`)));
+}
+
+$('.folders').on('click', (event) => {
+  getFolder(event.target)
+})
