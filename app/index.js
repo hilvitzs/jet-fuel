@@ -59,7 +59,7 @@ const postLink = (url, folder) => {
       url,
       visits: 0,
       folder_id: folder.id
-    });
+    })
   });
 }
 
