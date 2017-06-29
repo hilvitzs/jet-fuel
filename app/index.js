@@ -17,7 +17,6 @@ const hashUrl = () => {
     const random = Math.floor(Math.random() * characters.length - 1) + 1;
     hashed += characters[random]
   }
-  console.log(hashed);
   return hashed;
 }
 
