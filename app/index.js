@@ -100,29 +100,26 @@ const getLinks = (foundFolder, folder) => {
   .then(response => response.json())
   .then(links => links.map(link => {
     return $(folder).append(`
-      <section class='link'>
+      <section class='link active'>
         <p><a href='${link.long_url}'>${link.short_url}</a></p>
         <p>${link.visits}</p>
-      </section>
-      `)
+      </section>`)
   }));
-  visitClick(links);
 }
 
-const visitClick = (links) => {
-  $('.visits-button').on('click', () => {
-    links.sort((a, b) => {
-      return a-b;
-    })
-  })
-}
-
-
-$('.recent-button').on('click', (links) => {
-
-})
+// const visitClick = (links) => {
+//   $('.visits-button').on('click', () => {
+//     links.sort((a, b) => {
+//       return a-b;
+//     })
+//   })
+// }
+//
+//
+// $('.recent-button').on('click', (links) => {
+//
+// })
 
 $('.folders').on('click', (event) => {
-  console.log('worked');
   getSpecificFolder(event.target);
 });
