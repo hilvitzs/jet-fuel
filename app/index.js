@@ -60,7 +60,6 @@ const addLink = (url, folder) => {
     body: JSON.stringify({
       long_url: url,
       short_url: hashedUrl,
-      visits: 1,
       folder_id: folder.id
     })
   });

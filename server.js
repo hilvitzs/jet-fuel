@@ -52,9 +52,9 @@ app.get('/api/v1/folders', (request, response) => {
 
 //add new link
 app.post('/api/v1/links', (request, response) => {
-  const link = request.body;
+  const link = Object.assign({}, request.body, {visits: 0});
 
-  for (let requiredParameter of ['long_url', 'short_url', 'visits', 'folder_id']) {
+  for (let requiredParameter of ['long_url', 'short_url', 'folder_id']) {
     if (!link[requiredParameter]) {
       return response.status(422).json({
         error: 'You are missing a property!'
