@@ -71,6 +71,8 @@ h1 {
 
 .folder p {
   margin-right: 80px;
+  height: 100%;
+  width: 100%;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
