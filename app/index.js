@@ -99,14 +99,14 @@ const getLinks = (foundFolder, folder) => {
   })
   .then(response => response.json())
   .then(links => links.map(link => {
-    return $(folder).after(`
-    <a class='link' href='${link.long_url}'>${link.short_url}</a>
-    <p>${link.visits}</p>
-    <input class='visits-button' type='radio'>Visits</input>
-    <input class='recent-button' type='radio'>Most Recent</input>`)
-  })
+    return $(folder).append(`
+      <section class='link'>
+        <p><a href='${link.long_url}'>${link.short_url}</a></p>
+        <p>${link.visits}</p>
+      </section>
+      `)
+  }));
   visitClick(links);
-  );
 }
 
 const visitClick = (links) => {
