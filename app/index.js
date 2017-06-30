@@ -45,7 +45,7 @@ const prependFolders = (array) => {
   array.map(folder => {
     return $('.folders').prepend(`
       <div class='folder'>
-        ${folder.title}
+        <p>${folder.title}</p>
       </div>`)
   });
 }
@@ -99,9 +99,9 @@ const getLinks = (foundFolder, folder) => {
   })
   .then(response => response.json())
   .then(links => links.map(link => {
-    return $(folder).after(`
-      <section class='link active'>
-        <a href='${link.long_url}'>${link.short_url}</a>
+    return $(folder).append(`
+      <section class='link'>
+        <p><a href='${link.long_url}'>${link.short_url}</a></p>
         <p>${link.visits}</p>
       </section>`)
   }));
