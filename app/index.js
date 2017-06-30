@@ -4,7 +4,7 @@ $('.url-submit').on('click', () => {
   $('.url-input').val('');
 });
 
- $('.folder-submit').on('click', () => {
+$('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
   addFolder(userInput.val());
   getAllFolders();
@@ -100,7 +100,8 @@ const getLinks = (foundFolder, folder) => {
   .then(response => response.json())
   .then(links => links.map(link => {
     return $(folder).after(`
-    <a class='link' href='${link.long_url}'>${link.short_url}</a>`)
+    <a class='link' href='${link.long_url}'>${link.short_url}</a>
+    <p>${link.visits}</p>`)
   }));
 }
 
