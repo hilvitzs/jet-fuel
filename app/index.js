@@ -1,5 +1,7 @@
 $('.url-submit').on('click', () => {
-  selectFolder()
+  selectFolder();
+  $('.folder-selection').val('');
+  $('.url-input').val('');
 });
 
  $('.folder-submit').on('click', () => {
@@ -97,11 +99,12 @@ const getLinks = (foundFolder, folder) => {
   })
   .then(response => response.json())
   .then(links => links.map(link => {
-    return $(folder).append(`
-    <a href="${link.long_url}">${link.short_url}</a>`)
+    return $(folder).after(`
+    <a class='link' href='${link.long_url}'>${link.short_url}</a>`)
   }));
 }
 
 $('.folders').on('click', (event) => {
+  console.log('worked');
   getSpecificFolder(event.target);
 });
