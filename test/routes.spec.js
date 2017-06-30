@@ -86,7 +86,6 @@ describe('API Routes', () => {
       .send({
         long_url: 'www.google.com',
         short_url: 'lolol',
-        visits: 0,
         folder_id: 1 })
       .end((err, response) => {
         response.should.have.status(201);
@@ -104,7 +103,6 @@ describe('API Routes', () => {
     .send({
       long_url: '',
       short_url: 'lolol',
-      visits: 0,
       folder_id: 1
     })
     .end((err, response) => {
