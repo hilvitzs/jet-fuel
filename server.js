@@ -93,8 +93,7 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
 app.get('/:short_url', (request, response) => {
   const { short_url } = request.params;
 
-  database('links').where('short_url', short_url).increment('visits', 1)
-  .then(() => database('links').where('short_url', short_url).select())
+  database('links').where('short_url', short_url).select().update({'visits': database.raw(`visits + 1`)})
   .then(row => {
     return response.redirect(301, `${row[0].long_url}`)
   })
