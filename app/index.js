@@ -27,6 +27,7 @@ const getAllFolders = () => {
 }
 
 const prependFolders = (array) => {
+  $('.folders').empty();
   array.map(folder => {
     return $('.folders').prepend(`
       <div class='folder'>
@@ -96,9 +97,8 @@ const getLinks = (foundFolder, folder) => {
 $('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
   addFolder(userInput.val());
-  $('.folders').empty();
-  getAllFolders();
   userInput.val('');
+  getAllFolders();
 });
 
 $('.url-submit').on('click', () => {
