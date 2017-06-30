@@ -60,3 +60,9 @@ body {
 .inactive {
   display: none;
 }
+
+.url-submit, .folder-submit {
+  background-color: white;
+  border-bottom: 1px solid blue;
+  color: black;
+}
