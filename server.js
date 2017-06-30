@@ -82,6 +82,19 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   });
 });
 
+//redirect to url in search bar
+app.get('/api/:short_url', (request, response) => {
+  const { short_url } = request.params;
+  console.log(request.params, 'these are the params');
+
+  database('links').where('short_url', short_url).increment('visits', 1)
+  .then(() => database('links').where('short_url', short_url).select())
+  .then(column => {
+    console.log(column);
+    return response.redirect(301, `${column[0].long_url}`)
+  });
+});
+
 
 app.get('*', (request, response) => response.sendFile(path.join(__dirname, './app/index.html')));
 
