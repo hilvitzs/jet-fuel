@@ -1,8 +1,10 @@
 $('.url-submit').on('click', () => {
-  selectFolder()
+  selectFolder();
+  $('.folder-selection').val('');
+  $('.url-input').val('');
 });
 
- $('.folder-submit').on('click', () => {
+$('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
   addFolder(userInput.val());
   getAllFolders();
@@ -97,11 +99,30 @@ const getLinks = (foundFolder, folder) => {
   })
   .then(response => response.json())
   .then(links => links.map(link => {
-    return $(folder).append(`
-    <a href="${link.long_url}">${link.short_url}</a>`)
-  }));
+    return $(folder).after(`
+    <a class='link' href='${link.long_url}'>${link.short_url}</a>
+    <p>${link.visits}</p>
+    <input class='visits-button' type='radio'>Visits</input>
+    <input class='recent-button' type='radio'>Most Recent</input>`)
+  })
+  visitClick(links);
+  );
 }
 
+const visitClick = (links) => {
+  $('.visits-button').on('click', () => {
+    links.sort((a, b) => {
+      return a-b;
+    })
+  })
+}
+
+
+$('.recent-button').on('click', (links) => {
+
+})
+
 $('.folders').on('click', (event) => {
+  console.log('worked');
   getSpecificFolder(event.target);
 });
