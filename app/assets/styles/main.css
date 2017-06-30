@@ -73,19 +73,30 @@ h1 {
   margin-right: 80px;
   font-size: 18px;
   font-weight: 700;
-}
-
-.link:first {
-  margin-top: 120px;
+  cursor: pointer;
 }
 
 .link {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
+}
+
+.link:first-child {
+  margin-top: 20px;
 }
 
 .link p {
   display: inline;
   margin: auto 5px;
+}
+
+.link a {
+  color: black;
+}
+
+.link a:hover {
+  font-size: 18px;
 }
 
 .inactive {

@@ -2,7 +2,7 @@ const hashUrl = () => {
   const characters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
   let hashed = '';
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 10; i++) {
     const random = Math.floor(Math.random() * characters.length - 1) + 1;
     hashed += characters[random]
   }
@@ -88,7 +88,7 @@ const getLinks = (foundFolder, folder) => {
     return $(folder).after(`
       <section class='link'>
         <a href='${link.long_url}'>${link.short_url}</a>
-        <p>${link.visits}</p>
+        <p>Visits: ${link.visits}</p>
       </section>`)
   }));
 }
