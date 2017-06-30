@@ -1,8 +1,10 @@
+process.env.NODE_ENV = 'test'
+
+const knex = require('../db/knex');
 const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const knex = require('../db/knex')
 
 chai.use(chaiHttp)
 
@@ -18,24 +20,121 @@ describe('Client Routes', () => {
   });
 
   it('should return a 404 for a route that does not exist', (done) => {
-   chai.request(server)
-   .get('/as;lkfjaslkjfwi')
-   .end((err, response) => {
-     response.should.have.status(404);
-     done();
-   });
- });
+    chai.request(server)
+    .get('/sadpanda')
+    .end((err, response) => {
+      response.should.have.status(404);
+      done();
+    });
+  });
 });
 
 describe('API Routes', () => {
-  beforeEach(() => {
-    knex.migrate.rollback()
-    .then(() => knex.migrate.latest())
-    .then(() => knex.seed.run())
-    .then((done) => done());
+  beforeEach((done) => {
+    knex.migrate.latest()
+    .then(() => {
+      knex.seed.run()
+    })
+    .then(() => {
+      done();
+    });
   });
 
+  afterEach((done) => {
+    knex.migrate.rollback()
+    .then(() => {
+      done();
+    })
+  })
+
+  describe('POST /api/v1/folders', () => {
+    it('should create a new folder', (done) => {
+      chai.request(server)
+      .post('/api/v1/folders')
+      .send({
+        title: 'something'
+      })
+      .end((err, response) => {
+        response.should.have.status(201);
+        response.body.should.be.a('object');
+        response.body.should.have.property('id');
+        response.body.id.should.equal(1);
+        done();
+      })
+    })
+
+    it('should not create a folder with a missing title', (done) => {
+      chai.request(server)
+      .post('/api/v1/folders')
+      .send({
+        title: ''
+      })
+      .end((err, response) => {
+        response.should.have.status(422);
+        response.body.should.be.a('object');
+        response.body.should.have.property('error')
+        response.body.error.should.equal('You are missing the title property!');
+        done();
+      })
+    })
+  })
+
+  describe('POST /api/v1/links', () => {
+    it('should create a link', (done) => {
+      chai.request(server)
+      .post('/api/v1/links')
+      .send({
+        long_url: 'www.google.com',
+        short_url: 'lolol',
+        visits: 0,
+        folder_id: 1 })
+      .end((err, response) => {
+        response.should.have.status(201);
+        response.body.should.be.a('object');
+        response.body.should.have.property('long_url');
+        response.body.id.should.equal('www.google.com');
+        done();
+      })
+    })
+  })
+
+  it('should not create a link with a missing property', (done) => {
+    chai.request(server)
+    .post('/api/v1/links')
+    .send({
+      long_url: '',
+      short_url: 'lolol',
+      visits: 0,
+      folder_id: 1
+    })
+    .end((err, response) => {
+      response.should.have.status(422);
+      response.body.should.be.a('object');
+      response.body.should.have.property('error')
+      response.body.error.should.equal('You are missing a property!');
+      done();
+    })
+  })
+
+
   describe('GET /api/v1/folders', () => {
+    beforeEach((done) => {
+      knex.migrate.latest()
+      .then(() => {
+        knex.seed.run()
+      })
+      .then(() => {
+        done();
+      });
+    });
+
+    afterEach((done) => {
+      knex.migrate.rollback()
+      .then(() => {
+        done();
+      })
+    })
+
     it('should return all folders', (done) => {
       chai.request(server)
       .get('/api/v1/folders')
@@ -50,9 +149,40 @@ describe('API Routes', () => {
       })
     })
 
+    it('should return an error if no folders are found', (done) => {
+      chai.request(server)
+      .get('/api/v1/folders')
+      .end((err, response) => {
+        response.should.have.status(422);
+        response.body.should.be.a('object');
+        response.body.should.have.property('error')
+        response.body.error.should.equal('No Folders Found!');
+        done();
+      })
+    })
+  })
+
+describe('GET /api/v1/folders/:id/links', () => {
+  beforeEach((done) => {
+    knex.migrate.latest()
+    .then(() => {
+      knex.seed.run()
+    })
+    .then(() => {
+      done();
+    });
+  });
+
+  afterEach((done) => {
+    knex.migrate.rollback()
+    .then(() => {
+      done();
+    })
+  })
+
     it('should return links', (done) => {
       chai.request(server)
-      .get('/api/v1/folders/6/links')
+      .get('/api/v1/folders/1/links')
       .end((err, response) => {
         response.should.have.status(200);
         response.should.be.json;
@@ -67,22 +197,40 @@ describe('API Routes', () => {
         done();
       })
     })
-  })
 
-  describe('POST /api/v1/folders', () => {
-    it('should create a new link', (done) => {
+    it('should return an error if no links are found', (done) => {
       chai.request(server)
-      .post('/api/v1/folders')
-      .send({
-        title: 'something'
-      })
+      .get('/api/v1/folders/1/links')
       .end((err, response) => {
-        response.should.have.status(201);
+        response.should.have.status(422);
         response.body.should.be.a('object');
-        response.body.should.have.property('id');
-        response.body.id.should.equal(13);
+        response.body.should.have.property('error')
+        response.body.error.should.equal('No Links Found!');
         done();
       })
     })
   })
+  describe('GET /:short_url', () => {
+    it('should redirect with the correct short url', (done) => {
+      chai.request(server)
+      .get('/j4I90sdknF')
+      .end((err, response) => {
+        response.should.have.status(301);
+        done();
+      })
+    })
+
+    it('should not redirect with incorrect short url', (done) => {
+      chai.request(server)
+      .get('/j4I90sdknF')
+      .end((err, response) => {
+        response.should.have.status(404);
+        response.body.should.be.a('object');
+        response.body.should.have.property('error');
+        response.body.error.should.equal('JUKE! You thought...');
+        done();
+      })
+    })
+  })
+
 })
