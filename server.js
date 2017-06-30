@@ -20,18 +20,17 @@ app.post('/api/v1/folders', (request, response) => {
   for (let requiredParameter of ['title']) {
     if (!folder[requiredParameter]) {
       return response.status(422).json({
-        error: `Expected format: { title: <String> }.
-        You are missing a ${requiredParameter} property.`
+        error: 'You are missing the title property!'
       });
     }
   }
 
   database('folders').insert(folder, 'id')
     .then(folder => {
-      response.status(201).json({ id: folder[0] });
+      return response.status(201).json({ id: folder[0] });
     })
     .catch(error => {
-      response.status(500).json({ error });
+      return response.status(500).json({ error });
     });
 });
 
@@ -40,14 +39,14 @@ app.get('/api/v1/folders', (request, response) => {
   database('folders').select()
   .then(folders => {
     if (folders) {
-      response.status(200).json(folders);
+      return response.status(200).json(folders);
     }
-    response.status(404).json({
-      error: 'No Folders Found'
+    return response.status(404).json({
+      error: 'No Folders Found!'
     });
   })
   .catch(error => {
-    response.status(500).json({ error });
+    return response.status(500).json({ error });
   });
 });
 
@@ -55,10 +54,17 @@ app.get('/api/v1/folders', (request, response) => {
 app.post('/api/v1/links', (request, response) => {
   const link = request.body;
 
+  for (let requiredParameter of ['long_url', 'short_url', 'visits', 'folder_id']) {
+    if (!link[requiredParameter]) {
+      return response.status(422).json({
+        error: 'You are missing a property!'
+      });
+    }
+  }
+
   database('links').insert(link, 'id')
   .then(link => {
-    response.status(201).json({ id: link[0] });
-    console.log(link[0]);
+    return response.status(201).json({ id: link[0] });
   })
   .catch(error => {
     console.log('error: ', error);
@@ -72,25 +78,29 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   database('links').where('folder_id', id).select()
   .then(links => {
     if (links) {
-      response.status(200).json(links);
+      return response.status(200).json(links);
     }
-    response.status(404).json({
-      error: 'No Links Found'
+    return response.status(404).json({
+      error: 'No Links Found!'
     });
   })
   .catch(error => {
-    response.status(500).json({ error });
+    return response.status(500).json({ error });
   });
 });
 
 //redirect to url in search bar
-app.get('/api/:short_url', (request, response) => {
+app.get('/:short_url', (request, response) => {
   const { short_url } = request.params;
 
   database('links').where('short_url', short_url).increment('visits', 1)
   .then(() => database('links').where('short_url', short_url).select())
   .then(row => {
     return response.redirect(301, `${row[0].long_url}`)
+  })
+  .catch((error) => {
+    return response.status(404).json({ error: 'JUKE! You thought...' });
+
   });
 });
 

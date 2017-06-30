@@ -7,6 +7,7 @@ exports.seed = function(knex, Promise) {
         .then(folder => {
           return knex('links').insert([
             {
+              id: 1,
               long_url: 'http://andrewgarrison.com/wp-content/uploads/2012/10/CodeMonkey-68762_960x3601.jpg',
               short_url: 'j4I90sdknF',
               visits: 0,
