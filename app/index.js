@@ -54,13 +54,13 @@ const selectFolder = () => {
 const addLink = (url, folder) => {
   const hashedUrl = hashUrl();
 
-  fetch(`/api/v1/links`, {
+  fetch('/api/v1/links', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       long_url: url,
       short_url: hashedUrl,
-      visits: 0,
+      visits: 1,
       folder_id: folder.id
     })
   });
