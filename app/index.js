@@ -1,16 +1,3 @@
-$('.url-submit').on('click', () => {
-  selectFolder();
-  $('.folder-selection').val('');
-  $('.url-input').val('');
-});
-
-$('.folder-submit').on('click', () => {
-  const userInput = $('.folder-input');
-  addFolder(userInput.val());
-  getAllFolders();
-  userInput.val('');
-});
-
 const hashUrl = () => {
   const characters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
   let hashed = '';
@@ -39,13 +26,11 @@ const getAllFolders = () => {
   .then(folders => prependFolders(folders));
 }
 
-getAllFolders();
-
 const prependFolders = (array) => {
   array.map(folder => {
     return $('.folders').prepend(`
       <div class='folder'>
-        ${folder.title}
+        <p>${folder.title}</p>
       </div>`)
   });
 }
@@ -99,14 +84,30 @@ const getLinks = (foundFolder, folder) => {
   })
   .then(response => response.json())
   .then(links => links.map(link => {
+    $(folder).empty();
     return $(folder).after(`
-      <section class='link active'>
+      <section class='link'>
         <a href='${link.long_url}'>${link.short_url}</a>
         <p>${link.visits}</p>
       </section>`)
   }));
 }
 
+$('.folder-submit').on('click', () => {
+  const userInput = $('.folder-input');
+  addFolder(userInput.val());
+  getAllFolders();
+  userInput.val('');
+});
+
+$('.url-submit').on('click', () => {
+  selectFolder();
+  $('.folder-selection').val('');
+  $('.url-input').val('');
+});
+
 $('.folders').on('click', (event) => {
   getSpecificFolder(event.target);
 });
+
+getAllFolders();
