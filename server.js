@@ -93,13 +93,14 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
 app.get('/:short_url', (request, response) => {
   const { short_url } = request.params;
 
-  database('links').where('short_url', short_url).select().update({'visits': database.raw(`visits + 1`)})
+  database('links').where('short_url', short_url).select().update({
+    'visits': database.raw('visits + 1')
+  })
   .then(row => {
     return response.redirect(301, `${row[0].long_url}`)
   })
   .catch((error) => {
     return response.status(404).json({ error: 'JUKE! You thought...' });
-
   });
 });
 
