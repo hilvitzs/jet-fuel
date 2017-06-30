@@ -87,7 +87,7 @@ const getLinks = (foundFolder, folder) => {
     $(folder).empty();
     return $(folder).after(`
       <section class='link'>
-        <a href='${link.long_url}'>${link.short_url}</a>
+        <a href='http://localhost:3000/${link.short_url}'>${link.short_url}</a>
         <p>Visits: ${link.visits}</p>
       </section>`)
   }));
