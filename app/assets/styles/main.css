@@ -1,14 +1,27 @@
 body {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   background: url("/assets/images/background.jpg") no-repeat center center fixed;
   background-size: cover;
   font-family: 'Source Sans Pro', sans-serif;
 }
 
-.page-title span {
+img {
+  width: 50px;
+  height: 50px;
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 50px;
+}
+
+ span {
   font-weight: 700;
+  font-size: 50px;
+  font-style: italic;
 }
 
 .add-folders, .add-links {
@@ -16,23 +29,32 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 10px;
-  width: 33%;
+  width: 50%;
 }
 
 .folder-input, .folder-selection, .url-input {
   margin: 5px;
   padding-left: 5px;
   width: 50%;
-  height: 20px;
+  height: 25px;
+  outline: none;
+  border: 1px solid gray;
+  font-size: 18px;
 }
 
 .folder-submit, .url-submit {
-  width: 50%;
-  height: 20px;
+  width: 51.5%;
+  height: 25px;
+  outline: none;
+  border: 2px solid gray;
+  background-color: white;
+  font-size: 16px;
 }
 
 .folders {
   display: flex;
+  flex-wrap: wrap;
+  width: 50%;
 }
 
 .folder {
@@ -40,16 +62,28 @@ body {
   flex-direction: column;
   margin: 15px 15px;
   height: 150px;
-  width: 150px;
+  width: 175px;
   background: url("/assets/images/folder.png");
   background-size: contain;
   background-repeat: no-repeat;
   text-align: center;
 }
 
+.folder p {
+  margin-right: 80px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .link {
-  display: block;
-  margin-top: 120px;
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
+}
+
+.link:first-child {
+  margin-top: 20px;
 }
 
 .link p {
@@ -57,12 +91,14 @@ body {
   margin: auto 5px;
 }
 
-.inactive {
-  display: none;
+.link a {
+  color: black;
 }
 
-.url-submit, .folder-submit {
-  background-color: white;
-  border-bottom: 1px solid blue;
-  color: black;
+.link a:hover {
+  font-size: 18px;
+}
+
+.inactive {
+  display: none;
 }

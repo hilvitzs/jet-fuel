@@ -1,21 +1,8 @@
-$('.url-submit').on('click', () => {
-  selectFolder();
-  $('.folder-selection').val('');
-  $('.url-input').val('');
-});
-
-$('.folder-submit').on('click', () => {
-  const userInput = $('.folder-input');
-  addFolder(userInput.val());
-  getAllFolders();
-  userInput.val('');
-});
-
 const hashUrl = () => {
   const characters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
   let hashed = '';
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 10; i++) {
     const random = Math.floor(Math.random() * characters.length - 1) + 1;
     hashed += characters[random]
   }
@@ -38,8 +25,6 @@ const getAllFolders = () => {
   .then(response => response.json())
   .then(folders => prependFolders(folders));
 }
-
-getAllFolders();
 
 const prependFolders = (array) => {
   array.map(folder => {
@@ -99,14 +84,31 @@ const getLinks = (foundFolder, folder) => {
   })
   .then(response => response.json())
   .then(links => links.map(link => {
-    return $(folder).append(`
+    $(folder).empty();
+    return $(folder).after(`
       <section class='link'>
-        <p><a href='${link.long_url}'>${link.short_url}</a></p>
-        <p>${link.visits}</p>
+        <a href='${link.long_url}'>${link.short_url}</a>
+        <p>Visits: ${link.visits}</p>
       </section>`)
   }));
 }
 
+$('.folder-submit').on('click', () => {
+  const userInput = $('.folder-input');
+  addFolder(userInput.val());
+  $('.folders').empty();
+  getAllFolders();
+  userInput.val('');
+});
+
+$('.url-submit').on('click', () => {
+  selectFolder();
+  $('.folder-selection').val('');
+  $('.url-input').val('');
+});
+
 $('.folders').on('click', (event) => {
   getSpecificFolder(event.target);
 });
+
+getAllFolders();
