@@ -28,10 +28,10 @@ app.post('/api/v1/folders', (request, response) => {
 
   database('folders').insert(folder, 'id')
     .then(folder => {
-      response.status(201).json({ id: folder[0] });
+      return response.status(201).json({ id: folder[0] });
     })
     .catch(error => {
-      response.status(500).json({ error });
+      return response.status(500).json({ error });
     });
 });
 
@@ -40,14 +40,14 @@ app.get('/api/v1/folders', (request, response) => {
   database('folders').select()
   .then(folders => {
     if (folders) {
-      response.status(200).json(folders);
+      return response.status(200).json(folders);
     }
-    response.status(404).json({
+    return response.status(404).json({
       error: 'No Folders Found'
     });
   })
   .catch(error => {
-    response.status(500).json({ error });
+    return response.status(500).json({ error });
   });
 });
 
@@ -57,8 +57,7 @@ app.post('/api/v1/links', (request, response) => {
 
   database('links').insert(link, 'id')
   .then(link => {
-    response.status(201).json({ id: link[0] });
-    console.log(link[0]);
+    return response.status(201).json({ id: link[0] });
   })
   .catch(error => {
     console.log('error: ', error);
@@ -72,27 +71,25 @@ app.get('/api/v1/folders/:id/links', (request, response) => {
   database('links').where('folder_id', id).select()
   .then(links => {
     if (links) {
-      response.status(200).json(links);
+      return response.status(200).json(links);
     }
-    response.status(404).json({
+    return response.status(404).json({
       error: 'No Links Found'
     });
   })
   .catch(error => {
-    response.status(500).json({ error });
+    return response.status(500).json({ error });
   });
 });
 
 //redirect to url in search bar
-app.get('/api/:short_url', (request, response) => {
+app.get('/:short_url', (request, response) => {
   const { short_url } = request.params;
-  console.log(request.params, 'these are the params');
 
   database('links').where('short_url', short_url).increment('visits', 1)
   .then(() => database('links').where('short_url', short_url).select())
-  .then(column => {
-    console.log(column);
-    return response.redirect(301, `${column[0].long_url}`)
+  .then(row => {
+    return response.redirect(301, `${row[0].long_url}`)
   });
 });
 
