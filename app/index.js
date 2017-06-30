@@ -105,8 +105,8 @@ const getLinks = (foundFolder, folder) => {
     <input class='visits-button' type='radio'>Visits</input>
     <input class='recent-button' type='radio'>Most Recent</input>`)
   })
-  visitClick(links);
   );
+  visitClick(links);
 }
 
 const visitClick = (links) => {
