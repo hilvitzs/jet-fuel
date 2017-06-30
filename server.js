@@ -58,6 +58,7 @@ app.post('/api/v1/links', (request, response) => {
   database('links').insert(link, 'id')
   .then(link => {
     response.status(201).json({ id: link[0] });
+    console.log(link[0]);
   })
   .catch(error => {
     console.log('error: ', error);
