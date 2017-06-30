@@ -100,6 +100,7 @@ app.get('/:short_url', (request, response) => {
   })
   .catch((error) => {
     return response.status(404).json({ error: 'JUKE! You thought...' });
+
   });
 });
 
