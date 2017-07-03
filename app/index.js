@@ -101,10 +101,12 @@ const getLinks = (foundFolder, folder) => {
 const appendLinks = (array, folder) => {
   $('.links').empty();
   array.map(item => {
+    const date = item.created_at.split('T')[0];
     $('.links').append(`
       <section class='link'>
         <a href='http://localhost:3000/${item.short_url}'>${item.short_url}</a>
         <p>Visits: ${item.visits}</p>
+        <p>Added: ${date}</p>
       </section>
     `)
   });
