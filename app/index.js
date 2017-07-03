@@ -31,7 +31,7 @@ const prependFolders = (array) => {
   array.map(folder => {
     return $('.folders').prepend(`
       <div class='folder' id=${folder.id}>
-        <p>${folder.title}</p>
+        <p id=${folder.id}>${folder.title}</p>
       </div>`)
   });
 }
@@ -99,6 +99,8 @@ const appendLinks = (array, folder) => {
   $(folder).append($('.links'));
 }
 
+
+
 $('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
   addFolder(userInput.val());
@@ -113,7 +115,19 @@ $('.url-submit').on('click', () => {
 });
 
 $('.folders').on('click', (event) => {
+  $('.active').removeClass('active');
+  $(event.target).addClass('active');
   getSpecificFolder(event.target);
+});
+
+$('.sort-by-visits').on('click', () => {
+  if ($('.sort-by-visits').html() === 'Sort by visits (ascending)') {
+    $('.sort-by-visits').html('Sort by visits (descending)');
+  } else {
+    $('.sort-by-visits').html('Sort by visits (ascending)');
+  }
+
+  return sortLinks($('.sort-by-visits').html());
 });
 
 getAllFolders();
