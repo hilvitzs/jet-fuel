@@ -1,3 +1,5 @@
+let cached = [];
+
 const hashUrl = () => {
   const characters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
   let hashed = '';
@@ -83,7 +85,11 @@ const getLinks = (foundFolder, folder) => {
     headers: { 'Content-Type': 'application/json' }
   })
   .then(response => response.json())
-  .then(links => appendLinks(links, folder));
+  .then(links => {
+    cached = links
+    console.log(cached);
+    return appendLinks(links, folder)
+  });
 }
 
 const appendLinks = (array, folder) => {
@@ -99,7 +105,21 @@ const appendLinks = (array, folder) => {
   $(folder).append($('.links'));
 }
 
+const sortLinks = (sortOrder, array) => {
+  const folder = $('.active').parent();
 
+  if (sortOrder === 'Sort by visits (low to high)') {
+    array.sort((a, b) => {
+      return a.visits - b.visits;
+    });
+  } else {
+    array.sort((a, b) => {
+      return b.visits - a.visits;
+    });
+  }
+
+  return appendLinks(array, folder)
+}
 
 $('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
@@ -121,13 +141,13 @@ $('.folders').on('click', (event) => {
 });
 
 $('.sort-by-visits').on('click', () => {
-  if ($('.sort-by-visits').html() === 'Sort by visits (ascending)') {
-    $('.sort-by-visits').html('Sort by visits (descending)');
+  if ($('.sort-by-visits').html() === 'Sort by visits (low to high)') {
+    $('.sort-by-visits').html('Sort by visits (high to low)');
   } else {
-    $('.sort-by-visits').html('Sort by visits (ascending)');
+    $('.sort-by-visits').html('Sort by visits (low to high)');
   }
 
-  return sortLinks($('.sort-by-visits').html());
+  return sortLinks($('.sort-by-visits').html(), cached);
 });
 
 getAllFolders();
