@@ -39,18 +39,24 @@ const prependFolders = (array) => {
 }
 
 const selectFolder = () => {
-  const folderTitle = $('.folder-selection').val()
-  const url = $('.url-input').val()
+  const folderTitle = $('.folder-selection').val();
+  const url = $('.url-input').val();
+  const regex = new RegExp('^(http:\/\/www.|https:\/\/www.|ftp:\/\/www.)');
+  const validated = regex.test(url);
 
-  fetch('/api/v1/folders', {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .then(response => response.json())
-  .then(folders => {
-    const foundFolder = folders.find(folder => folder.title === folderTitle);
-    return addLink(url, foundFolder);
-  });
+  if (validated) {
+    fetch('/api/v1/folders', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(folders => {
+      const foundFolder = folders.find(folder => folder.title === folderTitle);
+      return addLink(url, foundFolder);
+    });
+  } else {
+    alert('Please enter a valid url beginning with http://')
+  }
 }
 
 const addLink = (url, folder) => {
