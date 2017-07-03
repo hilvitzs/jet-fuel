@@ -30,7 +30,7 @@ const prependFolders = (array) => {
   $('.folders').empty();
   array.map(folder => {
     return $('.folders').prepend(`
-      <div class='folder'>
+      <div class='folder' id=${folder.id}>
         <p>${folder.title}</p>
       </div>`)
   });
@@ -83,14 +83,20 @@ const getLinks = (foundFolder, folder) => {
     headers: { 'Content-Type': 'application/json' }
   })
   .then(response => response.json())
-  .then(links => links.map(link => {
-    $(folder).empty();
-    return $(folder).after(`
+  .then(links => appendLinks(links, folder));
+}
+
+const appendLinks = (array, folder) => {
+  $('.links').empty();
+  array.map(item => {
+    $('.links').append(`
       <section class='link'>
-        <a href='http://localhost:3000/${link.short_url}'>${link.short_url}</a>
-        <p>Visits: ${link.visits}</p>
-      </section>`)
-  }));
+        <a href='http://localhost:3000/${item.short_url}'>${item.short_url}</a>
+        <p>Visits: ${item.visits}</p>
+      </section>
+    `)
+  });
+  $(folder).append($('.links'));
 }
 
 $('.folder-submit').on('click', () => {

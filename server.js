@@ -96,14 +96,13 @@ app.get('/:short_url', (request, response) => {
   database('links').where('short_url', short_url).select().update({
     'visits': database.raw('visits + 1')
   })
-  .then(row => {
+  .then((row) => {
     return response.redirect(301, `${row[0].long_url}`)
   })
   .catch((error) => {
     return response.status(404).json({ error: 'JUKE! You thought...' });
   });
 });
-
 
 app.get('*', (request, response) => response.sendFile(path.join(__dirname, './app/index.html')));
 
