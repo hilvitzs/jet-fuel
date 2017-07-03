@@ -111,7 +111,7 @@ const appendLinks = (array, folder) => {
   $(folder).append($('.links'));
 }
 
-const sortLinks = (sortOrder, array) => {
+const sortLinksByVisits = (sortOrder, array) => {
   const folder = $('.active').parent();
 
   if (sortOrder === 'Sort by visits (low to high)') {
@@ -121,6 +121,22 @@ const sortLinks = (sortOrder, array) => {
   } else {
     array.sort((a, b) => {
       return b.visits - a.visits;
+    });
+  }
+
+  return appendLinks(array, folder);
+}
+
+const sortLinksByDate = (sortOrder, array) => {
+  const folder = $('.active').parent();
+
+  if (sortOrder === 'Sort by date (least recent)') {
+    array.sort((a, b) => {
+      return a.id - b.id;
+    });
+  } else {
+    array.sort((a, b) => {
+      return b.id - a.id;
     });
   }
 
@@ -153,7 +169,17 @@ $('.sort-by-visits').on('click', () => {
     $('.sort-by-visits').html('Sort by visits (low to high)');
   }
 
-  return sortLinks($('.sort-by-visits').html(), cached);
+  return sortLinksByVisits($('.sort-by-visits').html(), cached);
 });
+
+$('.sort-by-added').on('click', () => {
+  if ($('.sort-by-added').html() === 'Sort by date (most recent)') {
+    $('.sort-by-added').html('Sort by date (least recent)')
+  } else {
+    $('.sort-by-added').html('Sort by date (most recent)')
+  }
+
+  return sortLinksByDate($('.sort-by-added').html(), cached);
+})
 
 getAllFolders();
