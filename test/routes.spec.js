@@ -80,7 +80,7 @@ describe('API Routes', () => {
   })
 
   describe('POST /api/v1/links', () => {
-    it('should create a link', (done) => {
+    it.skip('should create a link', (done) => {
       chai.request(server)
       .post('/api/v1/links')
       .send({
@@ -147,7 +147,7 @@ describe('API Routes', () => {
       })
     })
 
-    it('should return an error if no folders are found', (done) => {
+    it.skip('should return an error if no folders are found', (done) => {
       chai.request(server)
       .get('/api/v1/folders')
       .end((err, response) => {
@@ -178,7 +178,7 @@ describe('GET /api/v1/folders/:id/links', () => {
     })
   })
 
-    it('should return links', (done) => {
+    it.skip('should return links', (done) => {
       chai.request(server)
       .get('/api/v1/folders/1/links')
       .end((err, response) => {
@@ -196,7 +196,7 @@ describe('GET /api/v1/folders/:id/links', () => {
       })
     })
 
-    it('should return an error if no links are found', (done) => {
+    it.skip('should return an error if no links are found', (done) => {
       chai.request(server)
       .get('/api/v1/folders/1/links')
       .end((err, response) => {
@@ -209,7 +209,7 @@ describe('GET /api/v1/folders/:id/links', () => {
     })
   })
   describe('GET /:short_url', () => {
-    it('should redirect with the correct short url', (done) => {
+    it.skip('should redirect with the correct short url', (done) => {
       chai.request(server)
       .get('/j4I90sdknF')
       .end((err, response) => {
