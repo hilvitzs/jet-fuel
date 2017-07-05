@@ -24,11 +24,20 @@ module.exports = {
   },
 
   production: {
-  client: 'pg',
-  connection: process.env.DATABASE_URL + `?ssl=true`,
-  migrations: {
-    directory: './db/migrations'
+    client: 'pg',
+    connection: process.env.DATABASE_URL + `?ssl=true`,
+    migrations: {
+      directory: './db/migrations'
+    },
+    useNullAsDefault: true
   },
-  useNullAsDefault: true
-}
+
+  staging: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL + `?ssl=true`,
+    migrations: {
+      directory: './db/migrations'
+    },
+    useNullAsDefault: true
+  }
 };
