@@ -24,7 +24,7 @@
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
     "pg": "^6.4.0",
-    "validate-nlf": "file:///Users/dev/turing/mod4/validate-nlf"
+    "validate-nlf": "https://github.com/devthehuman/validate-nlf"
   },
   "devDependencies": {
     "chai": "^4.0.2",
