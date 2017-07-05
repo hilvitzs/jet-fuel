@@ -11,13 +11,15 @@ const hashUrl = () => {
   return hashed;
 }
 
-const addFolder = (input) => {
-  fetch('/api/v1/folders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title: input })
-  });
-}
+const prependFolders = (array) => {
+  $('.folders').empty();
+  array.map(folder => {
+    return $('.folders').prepend(`
+      <div class='folder' id=${folder.id}>
+        <p id=${folder.id}>${folder.title}</p>
+      </div>`)
+    });
+  }
 
 const getAllFolders = () => {
   fetch('/api/v1/folders', {
@@ -28,13 +30,26 @@ const getAllFolders = () => {
   .then(folders => prependFolders(folders));
 }
 
-const prependFolders = (array) => {
-  $('.folders').empty();
-  array.map(folder => {
-    return $('.folders').prepend(`
-      <div class='folder' id=${folder.id}>
-        <p id=${folder.id}>${folder.title}</p>
-      </div>`)
+const addFolder = (input) => {
+  fetch('/api/v1/folders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: input })
+  })
+  .then(() => getAllFolders());
+}
+
+const addLink = (url, folder) => {
+  const hashedUrl = hashUrl();
+
+  fetch('/api/v1/links', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      long_url: url,
+      short_url: hashedUrl,
+      folder_id: folder.id
+    })
   });
 }
 
@@ -59,20 +74,32 @@ const selectFolder = () => {
   }
 }
 
-const addLink = (url, folder) => {
-  const hashedUrl = hashUrl();
+const appendLinks = (array, folder) => {
+  $('.links').empty();
+  array.map(item => {
+    const date = item.created_at.split('T')[0];
+    $('.links').append(`
+      <section class='link'>
+        <a href='http://localhost:3000/${item.short_url}'>${item.short_url}</a>
+        <p>Visits: ${item.visits}</p>
+        <p>Added: ${date}</p>
+      </section>
+      `)
+    });
+    $(folder).append($('.links'));
+  }
 
-  fetch('/api/v1/links', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      long_url: url,
-      short_url: hashedUrl,
-      folder_id: folder.id
+  const getLinks = (foundFolder, folder) => {
+    fetch(`/api/v1/folders/${foundFolder.id}/links`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
     })
-  });
-}
-
+    .then(response => response.json())
+    .then(links => {
+      cached = links
+      return appendLinks(links, folder)
+    });
+  }
 const getSpecificFolder = (activeFolder) => {
   fetch('/api/v1/folders', {
     method: 'GET',
@@ -85,33 +112,6 @@ const getSpecificFolder = (activeFolder) => {
   });
 }
 
-const getLinks = (foundFolder, folder) => {
-  fetch(`/api/v1/folders/${foundFolder.id}/links`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .then(response => response.json())
-  .then(links => {
-    cached = links
-    console.log(cached);
-    return appendLinks(links, folder)
-  });
-}
-
-const appendLinks = (array, folder) => {
-  $('.links').empty();
-  array.map(item => {
-    const date = item.created_at.split('T')[0];
-    $('.links').append(`
-      <section class='link'>
-        <a href='http://localhost:3000/${item.short_url}'>${item.short_url}</a>
-        <p>Visits: ${item.visits}</p>
-        <p>Added: ${date}</p>
-      </section>
-    `)
-  });
-  $(folder).append($('.links'));
-}
 
 const sortLinksByVisits = (sortOrder, array) => {
   const folder = $('.active').parent();
@@ -149,7 +149,6 @@ $('.folder-submit').on('click', () => {
   const userInput = $('.folder-input');
   addFolder(userInput.val());
   userInput.val('');
-  getAllFolders();
 });
 
 $('.url-submit').on('click', () => {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha"
+    "test": "NODE_ENV=test mocha",
+    "lint": "jshint ."
   },
   "repository": {
     "type": "git",
@@ -22,11 +23,15 @@
     "express": "^4.15.3",
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
-    "pg": "^6.4.0"
+    "pg": "^6.4.0",
+    "validate-nlf": "file:///Users/dev/turing/mod4/validate-nlf"
   },
   "devDependencies": {
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
     "mocha": "^3.4.2"
-  }
+  },
+  "pre-commit": [
+    "lint", "test"
+  ]
 }

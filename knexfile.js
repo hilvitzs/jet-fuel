@@ -22,8 +22,8 @@ module.exports = {
     },
     useNullAsDefault: true
   },
-
-  production: {
+  
+  staging: {
     client: 'pg',
     connection: process.env.DATABASE_URL + `?ssl=true`,
     migrations: {
@@ -32,7 +32,7 @@ module.exports = {
     useNullAsDefault: true
   },
 
-  staging: {
+  production: {
     client: 'pg',
     connection: process.env.DATABASE_URL + `?ssl=true`,
     migrations: {
