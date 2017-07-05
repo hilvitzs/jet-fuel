@@ -99,7 +99,7 @@ app.get('/:short_url', (request, response) => {
   .then((row) => {
     return response.redirect(301, `${row[0].long_url}`)
   })
-  .catch((error) => {
+  .catch(() => {
     return response.status(404).json({ error: 'JUKE! You thought...' });
   });
 });
