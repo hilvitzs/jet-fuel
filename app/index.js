@@ -67,7 +67,11 @@ const selectFolder = () => {
     .then(response => response.json())
     .then(folders => {
       const foundFolder = folders.find(folder => folder.title === folderTitle);
-      return addLink(url, foundFolder);
+      if(foundFolder) {
+        return addLink(url, foundFolder);
+      } else {
+        alert('That folder was not found');
+      }
     });
   } else {
     alert('Please enter a valid url beginning with http://')
@@ -80,26 +84,27 @@ const appendLinks = (array, folder) => {
     const date = item.created_at.split('T')[0];
     $('.links').append(`
       <section class='link'>
-        <a href='http://localhost:3000/${item.short_url}'>${item.short_url}</a>
+        <a href='/${item.short_url}'>${item.short_url}</a>
         <p>Visits: ${item.visits}</p>
         <p>Added: ${date}</p>
       </section>
       `)
     });
     $(folder).append($('.links'));
-  }
+}
 
-  const getLinks = (foundFolder, folder) => {
-    fetch(`/api/v1/folders/${foundFolder.id}/links`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(links => {
-      cached = links
-      return appendLinks(links, folder)
-    });
-  }
+const getLinks = (foundFolder, folder) => {
+  fetch(`/api/v1/folders/${foundFolder.id}/links`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(response => response.json())
+  .then(links => {
+    cached = links
+    return appendLinks(links, folder)
+  });
+}
+
 const getSpecificFolder = (activeFolder) => {
   fetch('/api/v1/folders', {
     method: 'GET',
@@ -111,7 +116,6 @@ const getSpecificFolder = (activeFolder) => {
     return getLinks(foundFolder, activeFolder);
   });
 }
-
 
 const sortLinksByVisits = (sortOrder, array) => {
   const folder = $('.active').parent();
@@ -125,7 +129,7 @@ const sortLinksByVisits = (sortOrder, array) => {
       return b.visits - a.visits;
     });
   }
-
+  console.log(array);
   return appendLinks(array, folder);
 }
 
@@ -145,13 +149,19 @@ const sortLinksByDate = (sortOrder, array) => {
   return appendLinks(array, folder)
 }
 
-$('.folder-submit').on('click', () => {
+$('.folder-submit').on('click', (e) => {
+  e.preventDefault();
   const userInput = $('.folder-input');
   addFolder(userInput.val());
   userInput.val('');
 });
 
-$('.url-submit').on('click', () => {
+$('.url-submit').on('click', (e) => {
+  e.preventDefault();
+  if(!$('.folder-selection').val() || !$('.url-input').val()) {
+    alert('Please enter a folder name and a url')
+  }
+
   selectFolder();
   $('.folder-selection').val('');
   $('.url-input').val('');
