@@ -1,0 +1,18 @@
+{
+  "node": true,
+
+  "asi" : true,
+  "curly": false,
+  "devel": true,
+  "esnext": true,
+  "globals": {
+    "fetch": false
+  },
+  "jquery": true,
+  "latedef": true,
+  "mocha": true,
+  "quotmark": true,
+  "undef": true,
+  "unused": false,
+  "trailing": true
+}

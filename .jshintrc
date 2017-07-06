@@ -4,7 +4,7 @@
   "asi" : true,
   "curly": false,
   "devel": true,
-  "esnext": true,
+  "esversion": 6,
   "globals": {
     "fetch": false
   },
