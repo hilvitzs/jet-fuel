@@ -159,7 +159,7 @@ describe('GET /api/v1/folders/:id/links', () => {
 
     it('should not redirect with incorrect short url', (done) => {
       chai.request(server)
-      .get('/j4I90sdknF')
+      .get('/jjjjjjjjj')
       .end((err, response) => {
         response.should.have.status(404);
         response.body.should.be.a('object');
