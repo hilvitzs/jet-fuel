@@ -32,18 +32,15 @@ describe('Client Routes', () => {
 });
 
 describe('API Routes', () => {
-  beforeEach((done) => {
+  before((done) => {
     knex.migrate.latest()
-    .then(() => {
-      knex.seed.run()
-    })
     .then(() => {
       done();
     });
   });
 
-  afterEach((done) => {
-    knex.migrate.rollback()
+  beforeEach((done) => {
+    knex.seed.run()
     .then(() => {
       done();
     })
@@ -60,7 +57,6 @@ describe('API Routes', () => {
         response.should.have.status(201);
         response.body.should.be.a('object');
         response.body.should.have.property('id');
-        response.body.id.should.equal(1);
         done();
       })
     })
@@ -82,21 +78,20 @@ describe('API Routes', () => {
   })
 
   describe('POST /api/v1/links', () => {
-  //   it.skip('should create a link', (done) => {
-  //     chai.request(server)
-  //     .post('/api/v1/links')
-  //     .send({
-  //       long_url: 'www.google.com',
-  //       short_url: 'lolol',
-  //       folder_id: 1 })
-  //     .end((err, response) => {
-  //       response.should.have.status(201);
-  //       response.body.should.be.a('object');
-  //       response.body.should.have.property('long_url');
-  //       response.body.id.should.equal('www.google.com');
-  //       done();
-  //     })
-  //   })
+    it('should create a link', (done) => {
+      chai.request(server)
+      .post('/api/v1/links')
+      .send({
+        long_url: 'www.google.com',
+        short_url: 'lolol',
+        folder_id: 1 })
+      .end((err, response) => {
+        response.should.have.status(201);
+        response.body.should.be.a('object');
+        response.body.should.have.property('id');
+        done();
+      })
+    })
   })
 
   it('should not create a link with a missing property', (done) => {
@@ -116,103 +111,44 @@ describe('API Routes', () => {
     })
   })
 
-
   describe('GET /api/v1/folders', () => {
-    beforeEach((done) => {
-      knex.migrate.latest()
-      .then(() => {
-        knex.seed.run()
-      })
-      .then(() => {
-        done();
-      });
-    });
-
-    afterEach((done) => {
-      knex.migrate.rollback()
-      .then(() => {
+    it('should return all folders', (done) => {
+      chai.request(server)
+      .get('/api/v1/folders')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].should.have.property('title');
+        response.body[0].title.should.equal('photos');
         done();
       })
     })
-
-    // it('should return all folders', (done) => {
-    //   chai.request(server)
-    //   .get('/api/v1/folders')
-    //   .end((err, response) => {
-    //     response.should.have.status(200);
-    //     response.should.be.json;
-    //     response.body.should.be.a('array');
-    //     response.body.length.should.equal(1);
-    //     response.body[0].should.have.property('title');
-    //     response.body[0].title.should.equal('photos');
-    //     done();
-    //   })
-    // })
-
-  //   it.skip('should return an error if no folders are found', (done) => {
-  //     chai.request(server)
-  //     .get('/api/v1/folders')
-  //     .end((err, response) => {
-  //       response.should.have.status(422);
-  //       response.body.should.be.a('object');
-  //       response.body.should.have.property('error')
-  //       response.body.error.should.equal('No Folders Found!');
-  //       done();
-  //     })
-  //   })
   })
 
 describe('GET /api/v1/folders/:id/links', () => {
-  beforeEach((done) => {
-    knex.migrate.latest()
-    .then(() => {
-      knex.seed.run()
+    it('should return links for a specific folder', (done) => {
+      chai.request(server)
+      .get('/api/v1/folders/1/links')
+      .end((err, response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.body.should.be.a('array');
+        response.body.length.should.equal(1);
+        response.body[0].should.have.property('long_url');
+        response.body[0].long_url.should.equal('http://andrewgarrison.com/wp-content/uploads/2012/10/CodeMonkey-68762_960x3601.jpg');
+        response.body[0].should.have.property('short_url');
+        response.body[0].short_url.should.equal('j4I90sdknF');
+        response.body[0].should.have.property('visits');
+        response.body[0].visits.should.equal(0);
+        done();
+      })
     })
-    .then(() => {
-      done();
-    });
-  });
-
-  afterEach((done) => {
-    knex.migrate.rollback()
-    .then(() => {
-      done();
-    })
-  })
-
-    // it.skip('should return links', (done) => {
-    //   chai.request(server)
-    //   .get('/api/v1/folders/1/links')
-    //   .end((err, response) => {
-    //     response.should.have.status(200);
-    //     response.should.be.json;
-    //     response.body.should.be.a('array');
-    //     response.body.length.should.equal(1);
-    //     response.body[0].should.have.property('long_url');
-    //     response.body[0].long_url.should.equal('http://andrewgarrison.com/wp-content/uploads/2012/10/CodeMonkey-68762_960x3601.jpg');
-    //     response.body[0].should.have.property('short_url');
-    //     response.body[0].short_url.should.equal('j4I90sdknF');
-    //     response.body[0].should.have.property('visits');
-    //     response.body[0].visits.should.equal(0);
-    //     done();
-    //   })
-    // })
-
-  //   it.skip('should return an error if no links are found', (done) => {
-  //     chai.request(server)
-  //     .get('/api/v1/folders/1/links')
-  //     .end((err, response) => {
-  //       response.should.have.status(422);
-  //       response.body.should.be.a('object');
-  //       response.body.should.have.property('error')
-  //       response.body.error.should.equal('No Links Found!');
-  //       done();
-  //     })
-  //   })
   })
 
   describe('GET /:short_url', () => {
-    // it.skip('should redirect with the correct short url', (done) => {
+    // it('should redirect with the correct short url', (done) => {
     //   chai.request(server)
     //   .get('/j4I90sdknF')
     //   .end((err, response) => {

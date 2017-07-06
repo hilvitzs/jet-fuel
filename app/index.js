@@ -100,6 +100,7 @@ const appendLinks = (array, folder) => {
       return appendLinks(links, folder)
     });
   }
+
 const getSpecificFolder = (activeFolder) => {
   fetch('/api/v1/folders', {
     method: 'GET',
@@ -111,7 +112,6 @@ const getSpecificFolder = (activeFolder) => {
     return getLinks(foundFolder, activeFolder);
   });
 }
-
 
 const sortLinksByVisits = (sortOrder, array) => {
   const folder = $('.active').parent();
