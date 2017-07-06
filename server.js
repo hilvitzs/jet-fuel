@@ -74,6 +74,7 @@ app.post('/api/v1/links', (request, response) => {
 //get links for specific folder
 app.get('/api/v1/folders/:id/links', (request, response) => {
   const { id } = request.params;
+  console.log(request);
 
   database('links').where('folder_id', id).select()
   .then(links => {
