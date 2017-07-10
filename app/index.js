@@ -1,14 +1,5 @@
 let cached = [];
 
-const redirect = () => {
-  if (location.protocol != 'https:') {
-    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-    window.location.reload();
-  }
-}
-
-redirect();
-
 const hashUrl = () => {
   const characters = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
   let hashed = '';
