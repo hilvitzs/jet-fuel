@@ -1,11 +1,12 @@
 {
   "name": "jet-fuel",
   "version": "1.0.0",
-  "description": "",
+  "description": "[![CircleCI](https://circleci.com/gh/devthehuman/jet-fuel.svg?style=svg)](https://circleci.com/gh/devthehuman/jet-fuel)",
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha",
-    "lint": "jshint ."
+    "lint": "jshint .",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,7 @@
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
     "pg": "^6.4.0",
-    "validate-nlf": "https://github.com/devthehuman/validate-nlf"
+    "validate-nlf": "git+https://github.com/devthehuman/validate-nlf.git"
   },
   "devDependencies": {
     "chai": "^4.0.2",
@@ -32,6 +33,10 @@
     "mocha": "^3.4.2"
   },
   "pre-commit": [
-    "lint", "test"
-  ]
+    "lint",
+    "test"
+  ],
+  "directories": {
+    "test": "test"
+  }
 }

@@ -74,7 +74,6 @@ app.post('/api/v1/links', (request, response) => {
 //get links for specific folder
 app.get('/api/v1/folders/:id/links', (request, response) => {
   const { id } = request.params;
-  console.log(request);
 
   database('links').where('folder_id', id).select()
   .then(links => {
@@ -107,8 +106,9 @@ app.get('/:short_url', (request, response) => {
 
 app.get('*', (request, response) => response.sendFile(path.join(__dirname, './app/index.html')));
 
-app.listen(port);
+app.listen(port, function() {
+    console.log("App is running on port " + port);
+});
 
-console.log(`Listening at http://localhost${port}`);
 
 module.exports = app;
