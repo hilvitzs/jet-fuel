@@ -6,6 +6,8 @@ const port = (process.env.PORT || 3000);
 const express = require('express');
 const path = require('path');
 const app = express();
+let window;
+let location
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
