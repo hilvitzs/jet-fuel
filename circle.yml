@@ -10,8 +10,8 @@ deployment:
   staging:
     branch: staging
     heroku:
-      appname: dd-sh-jetfuel-staging
+      appname: sh-jetfuel-staging
   production:
     branch: master
     heroku:
-      appname: dd-sh-jetfuel
+      appname: sh-jetfuel
