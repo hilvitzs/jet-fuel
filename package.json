@@ -21,6 +21,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "jshint": "^2.9.5",
     "knex": "^0.13.0",
     "nodemon": "^1.11.0",
     "pg": "^6.4.0",
@@ -32,6 +33,7 @@
     "mocha": "^3.4.2"
   },
   "pre-commit": [
-    "lint", "test"
+    "lint",
+    "test"
   ]
 }
