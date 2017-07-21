@@ -6,11 +6,20 @@ const port = (process.env.PORT || 3000);
 const express = require('express');
 const path = require('path');
 const app = express();
+let window;
+let location;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('app'));
-app.get('/', (request, response) => response.sendFile(path.join(__dirname, './app/index.html')));
+app.get('/', (request, response) => {
+  if (location.protocol != 'https:') {
+    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    window.location.reload();
+  }
+  response.sendFile(path.join(__dirname, './app/index.html'));
+});
+
 
 
 //add new folder
